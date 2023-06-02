@@ -31,48 +31,12 @@ export default function App() {
     }
   };
 
-
-
   return (
     <View style={styles.container}>
       {isAuthenticated ? <TodoList setIsAuthenticated={setIsAuthenticated}/> : <Auth onAuthenticate={authenticate} />}
-
-      {/* {isAuthenticated && <Text>Authenticated successfully!</Text>} */}
     </View>
   );
 }
-
-// export default function App() {
-//   const [isBiometricSupported, setIsBiometricSupported] = useState(false);
-//   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-//   // Check if hardware supports biometrics
-//   useEffect(() => {
-//     (async () => {
-//       const compatible = await LocalAuthentication.hasHardwareAsync();
-//       setIsBiometricSupported(compatible);
-//     })();
-//   });
-
-//   // Authentication
-//   function onAuthenticate() {
-//     const auth = LocalAuthentication.authenticateAsync({
-//     promptMessage: 'Authenticate with touch ID',
-//     fallbackLabel: 'Enter password',
-//     });
-//     auth.then(result => {
-//       setIsAuthenticated(result.success);
-//       console.log(result);
-//     })
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       {isAuthenticated ? <TodoList setIsAuthenticated={setIsAuthenticated}/> : <Auth onAuthenticate={onAuthenticate} />}
-//       <StatusBar style="auto" />
-//     </View>
-//   );
-// }
 
 const styles = StyleSheet.create({
   container: {

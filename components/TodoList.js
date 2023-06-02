@@ -12,8 +12,6 @@ import {
 } from 'react-native';
 
 import Task from './Task';
-import ActionButton from './ActionButton';
-
 
 import React, {useState} from 'react';
 
@@ -56,7 +54,7 @@ export default function TodoList({setIsAuthenticated}) {
   }
 
   function isUpdateFunctionality() {
-    return selected != null && selected >= 0
+    return selected != null && selected >= 0;
   }
 
   return ( 
@@ -96,26 +94,15 @@ export default function TodoList({setIsAuthenticated}) {
         <TextInput style={styles.inputText} placeholder={'Add a task'} value={task} onChangeText={text => setTask(text)} required/>
 
         <TouchableOpacity onPress={() => addTaskHandler()}>
-          <ActionButton isUpdate={isUpdateFunctionality()}/>
+          {/* <ActionButton isUpdate={isUpdateFunctionality()}/> */}
+            <View style={isUpdateFunctionality() ? [styles.buttonWrapper, styles.updateButtonWrapper] : styles.buttonWrapper }>
+            {isUpdateFunctionality() ? <Text style={styles.text}>&#10004;</Text>: <Text style={styles.text}>+</Text>}
+            </View>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </View>
   )
 }
-
-const CustomComponent = ({ color }) => {
-  const styles = StyleSheet.create({
-  buttonWrapper: {
-    width: 50,
-    height: 50,
-    backgroundColor: color,//#528AAE
-    borderRadius: 50,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    color: '#FFF',
-  },
-})};
 
 const styles = StyleSheet.create({
   btnLogout: {
@@ -132,7 +119,6 @@ const styles = StyleSheet.create({
     marginTop: 95,
     marginRight: 30,
   },
-
   container: {
     flex: 1,
     backgroundColor: '#E8EAED',
@@ -140,6 +126,7 @@ const styles = StyleSheet.create({
   todoWrapper: {
    paddingTop: 100,
    paddingHorizontal: 20,
+   paddingBottom: 110,
   },
   todoList: {
     marginTop: 20,
@@ -166,7 +153,10 @@ const styles = StyleSheet.create({
     borderColor: 'darkgrey',
     borderWidth: 1,
   },
-  addButtonWrapper: {
+  updateButtonWrapper: {
+    backgroundColor: '#007f00',
+  },
+  buttonWrapper: {
     width: 50,
     height: 50,
     backgroundColor: '#528AAE',
@@ -176,28 +166,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     color: '#FFF',
   },
-  editbuttonWrapper: {
-    width: 50,
-    height: 50,
-    borderRadius: 50,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    color: '#FFF',
-    backgroundColor: 'green',
-  },
-  buttonWrapper: {
-    width: 50,
-    height: 50,
-    borderRadius: 50,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    color: '#FFF',
-    backgroundColor: 'green',
-  },
   scrollContainer: { 
-    //height: '80%',
     marginTop: 30,
   },
   btn: {
