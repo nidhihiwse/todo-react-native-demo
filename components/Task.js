@@ -10,13 +10,11 @@ const Task = (props) => {
     <View style={styles.itemWrapper}>
       <View style={styles.itemLeft}> 
         <View style={styles.circle}></View> 
-    
-        <Text style={styles.itemText}>{props.text}</Text>
-   
+        <Text style={styles.itemText}>{props.text}</Text>   
       </View>
 
       {/* Remove button */}
-      <TouchableOpacity onPress={() => deleteHandler()} style={styles.itemRight}>
+      <TouchableOpacity onPress={() => deleteHandler()}>
         <Image
           style={styles.deleteIcon}
           source={require('../assets/delete.png')}
@@ -54,15 +52,10 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginRight: 10,
   },
-  itemRight: {},
   deleteIcon: {
     width: 20,
     height: 20,
   },
-  editIcon: {
-    width: 20,
-    height: 20,
-  }
 });
 
 export default Task;
