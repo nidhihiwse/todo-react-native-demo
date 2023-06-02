@@ -1,17 +1,32 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet,ImageBackground, Text, View, TouchableOpacity } from 'react-native';
 
 export default function Auth(props) {
   return ( 
-    <View style={styles.authScreen}>
+    <View style={styles.container}>
       {/* Login button */}
-      <TouchableOpacity onPress={props.onAuthenticate} style={styles.btnWrapper}>
-        <Text style={styles.text}>Login</Text>
-      </TouchableOpacity>
+      <View style={styles.authScreen}>
+        <Text style={styles.heading}>To do List demo app!</Text>
+        <TouchableOpacity onPress={props.onAuthenticate} style={styles.btnWrapper}>
+          <Text style={styles.loginText}>Login</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  authScreen: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  heading: {
+    fontSize: 32,
+  },
   btnWrapper: {
     display: 'flex',
     alignItems: 'center',
@@ -20,11 +35,9 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     backgroundColor: '#0969da',
     borderRadius: 5,
-    alignSelf: 'center',
-    position: 'absolute',
-    marginTop: 450,
+    marginTop: 20,
   },
-  text: {
+  loginText: {
     color: '#FFF',
   }
 });
