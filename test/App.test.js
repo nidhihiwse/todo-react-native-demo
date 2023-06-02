@@ -1,6 +1,5 @@
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
-import * as LocalAuthentication from 'expo-local-authentication';
+import { render, fireEvent } from '@testing-library/react-native';
 import App from '../App';
 
 jest.mock('expo-local-authentication', () => ({
@@ -9,17 +8,21 @@ jest.mock('expo-local-authentication', () => ({
 }));
 
 describe('App', () => {
-  it('should render the app', async () => {
+  it('should render Auth screen when not authenticated', () => {
     const { getByText } = render(<App />);
-
-    await waitFor(() => {
-      const authenticateButton = getByText('Authenticate');
-      expect(authenticateButton).toBeDefined();
-
-      fireEvent.press(authenticateButton);
-    });
-
-    const successText = await waitFor(() => getByText('Authenticated successfully!'));
-    expect(successText).toBeDefined();
+    const authScreen = getByText('To do List demo app!');
+    expect(authScreen).toBeDefined();
   });
+
+  it('should render TodoList screen when authenticated', async () => {
+    const { getByText } = render(<App />);
+  
+    fireEvent.press(getByText('Login'));
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const todoListScreen = getByText('Todo List');
+    expect(todoListScreen).toBeDefined();
+  });
+
 });

@@ -14,7 +14,7 @@ const Task = (props) => {
       </View>
 
       {/* Remove button */}
-      <TouchableOpacity onPress={() => deleteHandler()}>
+      <TouchableOpacity testID="delete-task-button" onPress={() => deleteHandler()}>
         <Image
           style={styles.deleteIcon}
           source={require('../assets/delete.png')}

@@ -12,21 +12,26 @@ import {
 } from 'react-native';
 
 import Task from './Task';
+import ActionButton from './ActionButton';
+
 
 import React, {useState} from 'react';
 
 export default function TodoList({setIsAuthenticated}) {
+  
   const [task, setTask] = useState();
   const [todoItems, setTodoItems] = useState([]);
   const [selected, setSelected] = useState();
 
   // Add task handler function
   const addTaskHandler = () => {
+
     Keyboard.dismiss();
-    if(task === "" || task == null) {
+
+    if(task == null || task === "") {
       Alert.alert('Task can not be empty.');
     } else {
-      if(selected != null && selected >= 0) {
+      if(isUpdateFunctionality()) {
         todoItems[selected] = task;
       } else {
         setTodoItems([...todoItems, task]);
@@ -50,9 +55,13 @@ export default function TodoList({setIsAuthenticated}) {
     setTask(todoItems[index]);
   }
 
+  function isUpdateFunctionality() {
+    return selected != null && selected >= 0
+  }
+
   return ( 
     <View style={styles.container}>
-      {/* Logut Button */}
+      {/* Logout Button */}
       <TouchableOpacity onPress={() => setIsAuthenticated(false)} style={styles.btnLogout}>
         <Text style={styles.text}>Logout</Text>
       </TouchableOpacity>
@@ -61,21 +70,22 @@ export default function TodoList({setIsAuthenticated}) {
         {/* Header */}
         <Text style={styles.titleText}>Todo List</Text>
         
-          {/* scrollable videw */}
-          <ScrollView style={styles.scrollContainer}>
-            {/* Todo List items */}
-            <View style={styles.todoList}>
-              {
-                todoItems.map((item, index) => {
-                  return <TouchableOpacity key={index} onPress={() => editTaskHandler(index)}>
-                    <Task text={item} key={index}
-                      onDelete={() => deleteTaskHandler(index)}
-                    />
-                  </TouchableOpacity>
-                })
-              }
-            </View>
-          </ScrollView>
+        {/* scrollable videw */}
+        <ScrollView style={styles.scrollContainer}>
+          {/* Todo List items */}
+          <View style={styles.todoList}>
+            {
+              todoItems.map((item, index) => {
+                return <TouchableOpacity testID="delete-task-button" key={index} onPress={() => editTaskHandler(index)}>
+                  <Task text={item} key={index}
+                    onDelete={() => deleteTaskHandler(index)}
+                  />
+                </TouchableOpacity>
+              })
+            }
+          </View>
+        </ScrollView>
+
       </View>
       
 
@@ -86,14 +96,26 @@ export default function TodoList({setIsAuthenticated}) {
         <TextInput style={styles.inputText} placeholder={'Add a task'} value={task} onChangeText={text => setTask(text)} required/>
 
         <TouchableOpacity onPress={() => addTaskHandler()}>
-          <View style={selected != null && selected >= 0 ? styles.editbuttonWrapper : styles.buttonWrapper}>
-            {selected != null && selected >= 0 ? <Text style={styles.btn}>&#10004;</Text>: <Text style={styles.btn}>+</Text>}
-          </View>
+          <ActionButton isUpdate={isUpdateFunctionality()}/>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </View>
   )
 }
+
+const CustomComponent = ({ color }) => {
+  const styles = StyleSheet.create({
+  buttonWrapper: {
+    width: 50,
+    height: 50,
+    backgroundColor: color,//#528AAE
+    borderRadius: 50,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: '#FFF',
+  },
+})};
 
 const styles = StyleSheet.create({
   btnLogout: {
@@ -144,7 +166,7 @@ const styles = StyleSheet.create({
     borderColor: 'darkgrey',
     borderWidth: 1,
   },
-  buttonWrapper: {
+  addButtonWrapper: {
     width: 50,
     height: 50,
     backgroundColor: '#528AAE',
@@ -155,6 +177,16 @@ const styles = StyleSheet.create({
     color: '#FFF',
   },
   editbuttonWrapper: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: '#FFF',
+    backgroundColor: 'green',
+  },
+  buttonWrapper: {
     width: 50,
     height: 50,
     borderRadius: 50,

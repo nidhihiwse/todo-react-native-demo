@@ -15,11 +15,7 @@ export default function App() {
       setIsBiometricSupported(compatible);
     };
 
-    try {
-      checkBiometricSupport();
-    } catch (error) {
-      console.log(error)
-    }
+    checkBiometricSupport();
   }, []);
 
   const authenticate = async () => {
@@ -35,12 +31,13 @@ export default function App() {
     }
   };
 
+
+
   return (
     <View style={styles.container}>
-      {isBiometricSupported && !isAuthenticated && (
-        <Button title="Authenticate" onPress={authenticate} />
-      )}
-      {isAuthenticated && <Text>Authenticated successfully!</Text>}
+      {isAuthenticated ? <TodoList setIsAuthenticated={setIsAuthenticated}/> : <Auth onAuthenticate={authenticate} />}
+
+      {/* {isAuthenticated && <Text>Authenticated successfully!</Text>} */}
     </View>
   );
 }
