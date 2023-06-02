@@ -13,13 +13,37 @@ import {
 
 import Task from './Task';
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 export default function TodoList({setIsAuthenticated}) {
   
   const [task, setTask] = useState();
   const [todoItems, setTodoItems] = useState([]);
   const [selected, setSelected] = useState();
+
+  const [keyBoardOffsetHeight, setKeyboardOffsetHeight] = useState(0);
+
+  useEffect(() => {
+    const keyboardWillShowListener = Keyboard.addListener(
+      "keyboardWillShow",
+      (e) => {
+        setKeyboardOffsetHeight(e.endCoordinates.height);
+      }
+    );
+    const keyboardWillHideListener = Keyboard.addListener(
+      "keyboardWillHide",
+      () => {
+        setKeyboardOffsetHeight(0);
+      }
+    );
+
+    return () => {
+      keyboardWillHideListener.remove();
+      keyboardWillShowListener.remove();
+    };
+  }, []);
+
+
 
   // Add task handler function
   const addTaskHandler = () => {
@@ -56,51 +80,51 @@ export default function TodoList({setIsAuthenticated}) {
   function isUpdateFunctionality() {
     return selected != null && selected >= 0;
   }
-
   return ( 
-    <View style={styles.container}>
-      {/* Logout Button */}
-      <TouchableOpacity onPress={() => setIsAuthenticated(false)} style={styles.btnLogout}>
-        <Text style={styles.text}>Logout</Text>
-      </TouchableOpacity>
+    
+    <View style={keyBoardOffsetHeight > 0 ? [styles.container, {marginBottom: keyBoardOffsetHeight}] : styles.container}>
+        {/* Logout Button */}
+        <TouchableOpacity onPress={() => setIsAuthenticated(false)} style={styles.btnLogout}>
+          <Text style={styles.text}>Logout</Text>
+        </TouchableOpacity>
 
-      <View style={styles.todoWrapper}>
-        {/* Header */}
-        <Text style={styles.titleText}>Todo List</Text>
+        <View style={styles.todoWrapper}>
+          {/* Header */}
+          <Text style={styles.titleText}>Todo List</Text>
+          
+          {/* scrollable videw */}
+          <ScrollView style={styles.scrollContainer}>
+            {/* Todo List items */}
+            <View style={styles.todoList}>
+              {
+                todoItems.map((item, index) => {
+                  return <TouchableOpacity testID="delete-task-button" key={index} onPress={() => editTaskHandler(index)}>
+                    <Task text={item} key={index}
+                      onDelete={() => deleteTaskHandler(index)}
+                    />
+                  </TouchableOpacity>
+                })
+              }
+            </View>
+          </ScrollView>
+
+        </View>
         
-        {/* scrollable videw */}
-        <ScrollView style={styles.scrollContainer}>
-          {/* Todo List items */}
-          <View style={styles.todoList}>
-            {
-              todoItems.map((item, index) => {
-                return <TouchableOpacity testID="delete-task-button" key={index} onPress={() => editTaskHandler(index)}>
-                  <Task text={item} key={index}
-                    onDelete={() => deleteTaskHandler(index)}
-                  />
-                </TouchableOpacity>
-              })
-            }
-          </View>
-        </ScrollView>
 
-      </View>
-      
-
-      {/* Footer */}
-      <KeyboardAvoidingView style={styles.addTaskWrapper}
+        {/* Footer */}
+        <KeyboardAvoidingView style={styles.addTaskWrapper}
         behaviour={Platform.OS === "ios" ? "padding" : "height"}>
 
-        <TextInput style={styles.inputText} placeholder={'Add a task'} value={task} onChangeText={text => setTask(text)} required/>
+          <TextInput style={styles.inputText} placeholder={'Add a task'} value={task} onChangeText={text => setTask(text)} required/>
 
-        <TouchableOpacity onPress={() => addTaskHandler()}>
-          {/* <ActionButton isUpdate={isUpdateFunctionality()}/> */}
-            <View style={isUpdateFunctionality() ? [styles.buttonWrapper, styles.updateButtonWrapper] : styles.buttonWrapper }>
-            {isUpdateFunctionality() ? <Text style={styles.text}>&#10004;</Text>: <Text style={styles.text}>+</Text>}
-            </View>
-        </TouchableOpacity>
-      </KeyboardAvoidingView>
-    </View>
+          <TouchableOpacity onPress={() => addTaskHandler()}>
+            {/* <ActionButton isUpdate={isUpdateFunctionality()}/> */}
+              <View style={isUpdateFunctionality() ? [styles.buttonWrapper, styles.updateButtonWrapper] : styles.buttonWrapper }>
+              {isUpdateFunctionality() ? <Text style={styles.text}>&#10004;</Text>: <Text style={styles.text}>+</Text>}
+              </View>
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
+      </View>
   )
 }
 
@@ -143,6 +167,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 20,
     width: '100%',
+    flex: 1
   },
   inputText: {
     paddingVertical: 15,
